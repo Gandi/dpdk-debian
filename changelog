@@ -1,0 +1,5 @@
+dpdk (2.0.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Arthur Gautier <baloo@gandi.net>  Wed, 08 Jul 2015 08:00:16 +0000

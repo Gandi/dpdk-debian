@@ -1,0 +1,41 @@
+Source: dpdk
+Section: net
+Priority: optional
+Maintainer: Arthur Gautier <baloo@gandi.net>
+Build-Depends: debhelper (>= 9), quilt
+Standards-Version: 3.9.5
+Homepage: http://dpdk.org/
+#Vcs-Git: git://anonscm.debian.org/collab-maint/dpdk.git
+#Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/dpdk.git;a=summary
+
+Package: dpdk-kernel-modules
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dkms
+Description: DPDK - kernel modules
+ DPDK is a set of libraries and drivers for fast packet processing. It was
+ designed to run on any processors knowing Intel x86 has been the first CPU
+ to be supported. Ports for other CPUs like IBM Power 8 are under progress. 
+
+Package: dpdk-westmere
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version})
+Description: DPDK - Westmere
+ DPDK is a set of libraries and drivers for fast packet processing. It was
+ designed to run on any processors knowing Intel x86 has been the first CPU
+ to be supported. Ports for other CPUs like IBM Power 8 are under progress. 
+
+Package: dpdk-sandybridge
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version})
+Description: DPDK - Sandy Bridge
+ DPDK is a set of libraries and drivers for fast packet processing. It was
+ designed to run on any processors knowing Intel x86 has been the first CPU
+ to be supported. Ports for other CPUs like IBM Power 8 are under progress. 
+
+Package: dpdk-ivybridge
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version})
+Description: DPDK - Ivy Bridge
+ DPDK is a set of libraries and drivers for fast packet processing. It was
+ designed to run on any processors knowing Intel x86 has been the first CPU
+ to be supported. Ports for other CPUs like IBM Power 8 are under progress. 

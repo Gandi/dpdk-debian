@@ -1,0 +1,4 @@
+lib    usr/src/dpdk-DEB_VERSION_UPSTREAM
+mk     usr/src/dpdk-DEB_VERSION_UPSTREAM
+config usr/src/dpdk-DEB_VERSION_UPSTREAM
+
