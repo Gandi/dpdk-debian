@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
-DH_VERBOSE=1
+# DH_VERBOSE=1
 QUILT_REFRESH_ARGS=-p ab --no-timestamps --no-index
 
 # see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
@@ -42,7 +42,7 @@ dh_auto_build/sandybridge:
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="snb" \
 		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
-		O=$(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge/
+		DESTDIR=$(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge/
 
 .PHONY: dh_auto_build/ivybridge
 dh_auto_build/ivybridge:
@@ -53,7 +53,7 @@ dh_auto_build/ivybridge:
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="ivb" \
 		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
-		O=$(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
+		DESTDIR=$(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
 
 .PHONY: dh_auto_install/kernel-modules
 dh_auto_install/kernel-modules:
