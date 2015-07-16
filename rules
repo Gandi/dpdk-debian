@@ -1,29 +1,37 @@
 #!/usr/bin/make -f
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
-#DH_VERBOSE = 1
+DH_VERBOSE=1
+QUILT_REFRESH_ARGS=-p ab --no-timestamps --no-index
 
 # see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
 DPKG_EXPORT_BUILDFLAGS = 1
+
 include /usr/share/dpkg/default.mk
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with=quilt
+	dh $@ --with=quilt,dkms
 
 override_dh_auto_configure:
 
 override_dh_auto_build: dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
 
+DEBVERS := $(shell dpkg-parsechangelog | grep ^Version: | cut -d' ' -f2 \
+		| cut -d- -f1)
+
+VERSION := $(shell echo '$(DEBVERS)' | sed -e 's/[+-].*//' -e 's/~//g')
+
 .PHONY: dh_auto_build/westmere
 dh_auto_build/westmere:
 	make install \
-		T=x86_64-native-linuxapp-gcc\
+		T=x86_64-native-linuxapp-gcc \
+		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
 		CONFIG_RTE_LIBRTE_KNI=n \
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="wsm" \
-		O=$(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/
+		DESTDIR=$(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/
 
 .PHONY: dh_auto_build/sandybridge
 dh_auto_build/sandybridge:
@@ -33,6 +41,7 @@ dh_auto_build/sandybridge:
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="snb" \
+		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
 		O=$(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge/
 
 .PHONY: dh_auto_build/ivybridge
@@ -43,6 +52,7 @@ dh_auto_build/ivybridge:
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="ivb" \
+		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
 		O=$(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
 
 .PHONY: dh_auto_install/kernel-modules
@@ -52,5 +62,11 @@ dh_auto_install/kernel-modules:
 		T=x86_64-native-linuxapp-gcc\
 		O=$(CURDIR)/debian/dpdk-kernel-modules/usr/lib/dpdk-kernel-modules/
 
+override_dh_dkms:
+	dh_dkms -V $(VERSION)
+
 override_dh_auto_test:
-override_dh_auto_install:
+override_dh_auto_clean:
+	rm -rf $(CURDIR)/x86_64-native-linuxapp-gcc
+
+override_dh_auto_install:dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
