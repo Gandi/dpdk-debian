@@ -11,22 +11,18 @@ include /usr/share/dpkg/default.mk
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with=quilt,dkms
+	dh $@ --with=quilt,dkms --parallel
 
 override_dh_auto_configure:
 
 override_dh_auto_build: dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
-
-DEBVERS := $(shell dpkg-parsechangelog | grep ^Version: | cut -d' ' -f2 \
-		| cut -d- -f1)
-
-VERSION := $(shell echo '$(DEBVERS)' | sed -e 's/[+-].*//' -e 's/~//g')
 
 .PHONY: dh_auto_build/westmere
 dh_auto_build/westmere:
 	make install \
 		T=x86_64-native-linuxapp-gcc \
 		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
+		CONFIG_RTE_BUILD_SHARED_LIB=y \
 		CONFIG_RTE_LIBRTE_KNI=n \
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
@@ -37,36 +33,37 @@ dh_auto_build/westmere:
 dh_auto_build/sandybridge:
 	make install \
 		T=x86_64-native-linuxapp-gcc\
+		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
+		CONFIG_RTE_BUILD_SHARED_LIB=y \
 		CONFIG_RTE_LIBRTE_KNI=n \
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="snb" \
-		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
 		DESTDIR=$(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge/
 
 .PHONY: dh_auto_build/ivybridge
 dh_auto_build/ivybridge:
 	make install \
 		T=x86_64-native-linuxapp-gcc\
+		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
+		CONFIG_RTE_BUILD_SHARED_LIB=y \
 		CONFIG_RTE_LIBRTE_KNI=n \
 		CONFIG_RTE_EAL_IGB_UIO=n \
 		CONFIG_RTE_APP_TEST=n \
 		CONFIG_RTE_MACHINE="ivb" \
-		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
 		DESTDIR=$(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
 
 .PHONY: dh_auto_install/kernel-modules
 dh_auto_install/kernel-modules:
-	make config lib/librte_eal/common_sub lib/librte_eal/linuxapp_sub lib/librte_eal/linuxapp/igb_uio_sub\
-		RTE_KERNELDIR=/usr/src/linux-headers-4.0.0-1-amd64 \
-		T=x86_64-native-linuxapp-gcc\
-		O=$(CURDIR)/debian/dpdk-kernel-modules/usr/lib/dpdk-kernel-modules/
+	dh_install GNUmakefile LICENSE.GPL LICENSE.LGPL MAINTAINERS Makefile app config doc examples lib mk pkg scripts tools usr/src/dpdk-kernel-modules-2.0.0/
 
 override_dh_dkms:
-	dh_dkms -V $(VERSION)
+	dh_dkms -V $(DEB_VERSION_UPSTREAM)
+
 
 override_dh_auto_test:
 override_dh_auto_clean:
 	rm -rf $(CURDIR)/x86_64-native-linuxapp-gcc
+	rm -rf $(CURDIR)/build
 
-override_dh_auto_install:dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
+override_dh_auto_install:dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge dh_auto_install/kernel-modules
