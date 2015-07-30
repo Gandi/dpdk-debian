@@ -18,7 +18,7 @@ Description: DPDK - kernel modules
 
 Package: dpdk-westmere
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version}), libpcap-dev
 Description: DPDK - Westmere
  DPDK is a set of libraries and drivers for fast packet processing. It was
  designed to run on any processors knowing Intel x86 has been the first CPU
