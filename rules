@@ -6,6 +6,7 @@ QUILT_REFRESH_ARGS=-p ab --no-timestamps --no-index
 
 # see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
 DPKG_EXPORT_BUILDFLAGS = 1
+DPDK_TARGET=x86_64-native-linuxapp-gcc
 
 include /usr/share/dpkg/default.mk
 
@@ -13,45 +14,51 @@ include /usr/share/dpkg/default.mk
 %:
 	dh $@ --with=quilt,dkms --parallel
 
-override_dh_auto_configure:
+override_dh_auto_configure: dh_auto_configure/westmere dh_auto_configure/sandybridge dh_auto_configure/ivybridge
+
+.PHONY: dh_auto_configure/westmere
+dh_auto_configure/westmere:
+	make T=$(DPDK_TARGET) O=$(DPDK_TARGET)-westmere config
+	sed -ri 's,(RTE_MACHINE=).*,\1"wsm",'      $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(RTE_APP_TEST=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(RTE_BUILD_SHARED_LIB=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(LIBRTE_PMD_PCAP=).*,\1y,'      $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(RTE_EAL_IGB_UIO=).*,\1n,'      $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+
+.PHONY: dh_auto_configure/sandybridge
+dh_auto_configure/sandybridge:
+	make T=$(DPDK_TARGET) O=$(DPDK_TARGET)-sandybridge config
+	sed -ri 's,(RTE_MACHINE=).*,\1"snb",'      $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(RTE_APP_TEST=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(RTE_BUILD_SHARED_LIB=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(LIBRTE_PMD_PCAP=).*,\1y,'      $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(RTE_EAL_IGB_UIO=).*,\1n,'      $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+
+.PHONY: dh_auto_configure/ivybridge
+dh_auto_configure/ivybridge:
+	make T=$(DPDK_TARGET) O=$(DPDK_TARGET)-ivybridge config
+	sed -ri 's,(RTE_MACHINE=).*,\1"ivb",'      $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(RTE_APP_TEST=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(RTE_BUILD_SHARED_LIB=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(LIBRTE_PMD_PCAP=).*,\1y,'      $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(RTE_EAL_IGB_UIO=).*,\1n,'      $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
 
 override_dh_auto_build: dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
 
 .PHONY: dh_auto_build/westmere
 dh_auto_build/westmere:
-	make install \
-		T=x86_64-native-linuxapp-gcc \
-		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
-		CONFIG_RTE_BUILD_SHARED_LIB=y \
-		CONFIG_RTE_LIBRTE_KNI=n \
-		CONFIG_RTE_EAL_IGB_UIO=n \
-		CONFIG_RTE_APP_TEST=n \
-		CONFIG_RTE_MACHINE="wsm" \
-		DESTDIR=$(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/
+	make -j5 O=$(DPDK_TARGET)-westmere DESTDIR=$(CURDIR)/debian/build/dpdk-westmere/
 
 .PHONY: dh_auto_build/sandybridge
 dh_auto_build/sandybridge:
-	make install \
-		T=x86_64-native-linuxapp-gcc\
-		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
-		CONFIG_RTE_BUILD_SHARED_LIB=y \
-		CONFIG_RTE_LIBRTE_KNI=n \
-		CONFIG_RTE_EAL_IGB_UIO=n \
-		CONFIG_RTE_APP_TEST=n \
-		CONFIG_RTE_MACHINE="snb" \
-		DESTDIR=$(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge/
+	make -j5 O=$(DPDK_TARGET)-sandybridge DESTDIR=$(CURDIR)/debian/build/dpdk-sandybridge/
 
 .PHONY: dh_auto_build/ivybridge
 dh_auto_build/ivybridge:
-	make install \
-		T=x86_64-native-linuxapp-gcc\
-		CONFIG_RTE_BUILD_COMBINE_LIBS=y \
-		CONFIG_RTE_BUILD_SHARED_LIB=y \
-		CONFIG_RTE_LIBRTE_KNI=n \
-		CONFIG_RTE_EAL_IGB_UIO=n \
-		CONFIG_RTE_APP_TEST=n \
-		CONFIG_RTE_MACHINE="ivb" \
-		DESTDIR=$(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
+	make -j5 O=$(DPDK_TARGET)-ivybridge DESTDIR=$(CURDIR)/debian/build/dpdk-ivybridge/
 
 .PHONY: dh_auto_install/kernel-modules
 dh_auto_install/kernel-modules:
@@ -63,7 +70,52 @@ override_dh_dkms:
 
 override_dh_auto_test:
 override_dh_auto_clean:
-	rm -rf $(CURDIR)/x86_64-native-linuxapp-gcc
-	rm -rf $(CURDIR)/build
+	rm -rf $(CURDIR)/$(DPDK_TARGET)-*
+	rm -rf $(CURDIR)/debian/build
 
-override_dh_auto_install:dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge dh_auto_install/kernel-modules
+override_dh_auto_install: dh_auto_install/westmere dh_auto_install/sandybridge dh_auto_install/ivybridge dh_auto_install/kernel-modules
+
+.PHONY: dh_auto_install/westmere
+dh_auto_install/westmere:
+	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/bin
+	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib $(CURDIR)/debian/dpdk-westmere/usr/
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include $(CURDIR)/debian/dpdk-westmere/usr/
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/app/testpmd $(CURDIR)/debian/dpdk-westmere/usr/bin
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/.config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/config
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/ $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/scripts $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/mk $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/include $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/include
+	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/lib $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/lib
+	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/.config
+
+.PHONY: dh_auto_install/sandybridge
+dh_auto_install/sandybridge:
+	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/bin
+	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib $(CURDIR)/debian/dpdk-sandybridge/usr/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include $(CURDIR)/debian/dpdk-sandybridge/usr/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/app/testpmd $(CURDIR)/debian/dpdk-sandybridge/usr/bin
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/.config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/config
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/ $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/scripts $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/mk $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/include $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include
+	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/lib $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib
+	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/.config
+
+.PHONY: dh_auto_install/ivybridge
+dh_auto_install/ivybridge:
+	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/bin
+	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib $(CURDIR)/debian/dpdk-ivybridge/usr/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include $(CURDIR)/debian/dpdk-ivybridge/usr/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/app/testpmd $(CURDIR)/debian/dpdk-ivybridge/usr/bin
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/config
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/ $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/scripts $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/mk $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/include $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include
+	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/lib $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib
+	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config
