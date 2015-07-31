@@ -1,0 +1,25 @@
+Index: b/config/common_linuxapp
+===================================================================
+--- a/config/common_linuxapp
++++ b/config/common_linuxapp
+@@ -404,6 +404,7 @@ CONFIG_RTE_LIBRTE_PIPELINE=y
+ # Compile librte_kni
+ #
+ CONFIG_RTE_LIBRTE_KNI=y
++CONFIG_RTE_KNI_KMOD=y
+ CONFIG_RTE_KNI_PREEMPT_DEFAULT=y
+ CONFIG_RTE_KNI_KO_DEBUG=n
+ CONFIG_RTE_KNI_VHOST=n
+Index: b/lib/librte_eal/linuxapp/Makefile
+===================================================================
+--- a/lib/librte_eal/linuxapp/Makefile
++++ b/lib/librte_eal/linuxapp/Makefile
+@@ -35,7 +35,7 @@ ifeq ($(CONFIG_RTE_EAL_IGB_UIO),y)
+ DIRS-$(CONFIG_RTE_LIBRTE_EAL_LINUXAPP) += igb_uio
+ endif
+ DIRS-$(CONFIG_RTE_LIBRTE_EAL_LINUXAPP) += eal
+-ifeq ($(CONFIG_RTE_LIBRTE_KNI),y)
++ifeq ($(CONFIG_RTE_KNI_KMOD),y)
+ DIRS-$(CONFIG_RTE_LIBRTE_EAL_LINUXAPP) += kni
+ endif
+ ifeq ($(CONFIG_RTE_LIBRTE_XEN_DOM0),y)
