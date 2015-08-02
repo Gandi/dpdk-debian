@@ -73,55 +73,61 @@ override_dh_auto_clean:
 	rm -rf $(CURDIR)/$(DPDK_TARGET)-*
 	rm -rf $(CURDIR)/debian/build
 
-override_dh_auto_install: dh_auto_install/westmere dh_auto_install/sandybridge dh_auto_install/ivybridge dh_auto_install/kernel-modules
+override_dh_auto_install: dh_auto_install/kernel-modules dh_auto_install/westmere dh_auto_install/sandybridge dh_auto_install/ivybridge
 
 .PHONY: dh_auto_install/westmere
 dh_auto_install/westmere:
 	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/bin
-	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib/* $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk
-	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include/* $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk
-	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/app/testpmd $(CURDIR)/debian/dpdk-westmere/usr/bin
-	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/.config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/config
-	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/ $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-westmere/scripts $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-westmere/mk $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/
-	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/$(DPDK_TARGET)-westmere/include
-	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/$(DPDK_TARGET)-westmere/lib
-	ln -rs $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk/$(DPDK_TARGET)-westmere/.config
+	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere
+	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk-westmere
+	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib/* $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include/* $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk-westmere/
+	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/app
+	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include
+	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/.config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/config
+	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/ $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/scripts $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	mv $(CURDIR)/debian/build/dpdk-westmere/mk $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/
+	ln -rsT $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk-westmere/ $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/include
+	ln -rsT $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/ $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/lib
+	ln -rsT $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/config $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere/$(DPDK_TARGET)-westmere/.config
 
 .PHONY: dh_auto_install/sandybridge
 dh_auto_install/sandybridge:
 	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/bin
-	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib/* $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include/* $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/app/testpmd $(CURDIR)/debian/dpdk-sandybridge/usr/bin
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/.config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/config
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/ $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/scripts $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-sandybridge/mk $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/
-	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/$(DPDK_TARGET)-sandybridge/include
-	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/$(DPDK_TARGET)-sandybridge/lib
-	ln -rs $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk/$(DPDK_TARGET)-sandybridge/.config
+	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge
+	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk-sandybridge
+	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib/* $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include/* $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk-sandybridge
+	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/app
+	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include
+	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/.config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/config
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/ $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/scripts $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	mv $(CURDIR)/debian/build/dpdk-sandybridge/mk $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/
+	ln -rsT $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk-sandybridge $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include
+	ln -rsT $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib
+	ln -rsT $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/config $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/.config
 
 .PHONY: dh_auto_install/ivybridge
 dh_auto_install/ivybridge:
 	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/bin
-	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk
-	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib/* $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include/* $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/app/testpmd $(CURDIR)/debian/dpdk-ivybridge/usr/bin
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/config
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/ $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/scripts $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/
-	mv $(CURDIR)/debian/build/dpdk-ivybridge/mk $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/
-	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/$(DPDK_TARGET)-ivybridge/include
-	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/$(DPDK_TARGET)-ivybridge/lib
-	ln -rs $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk/$(DPDK_TARGET)-ivybridge/.config
+	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge
+	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk-ivybridge
+	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib/* $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include/* $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk-ivybridge/
+	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/app
+	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include
+	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/config
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/ $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/scripts $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	mv $(CURDIR)/debian/build/dpdk-ivybridge/mk $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/
+	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk-ivybridge $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include
+	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib
+	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config
