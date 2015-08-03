@@ -2,7 +2,10 @@ Source: dpdk
 Section: net
 Priority: optional
 Maintainer: Arthur Gautier <baloo@gandi.net>
-Build-Depends: debhelper (>= 9), quilt
+Build-Depends: debhelper (>= 9),
+ quilt,
+ dkms,
+ libpcap-dev
 Standards-Version: 3.9.6
 Homepage: http://dpdk.org/
 #Vcs-Git: git://anonscm.debian.org/collab-maint/dpdk.git
@@ -19,6 +22,7 @@ Description: DPDK - kernel modules
 Package: dpdk-westmere
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version}), libpcap-dev
+Provides: dpdk
 Description: DPDK - Westmere
  DPDK is a set of libraries and drivers for fast packet processing. It was
  designed to run on any processors knowing Intel x86 has been the first CPU
@@ -27,6 +31,7 @@ Description: DPDK - Westmere
 Package: dpdk-sandybridge
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version}), libpcap-dev
+Provides: dpdk
 Description: DPDK - Sandy Bridge
  DPDK is a set of libraries and drivers for fast packet processing. It was
  designed to run on any processors knowing Intel x86 has been the first CPU
@@ -35,6 +40,7 @@ Description: DPDK - Sandy Bridge
 Package: dpdk-ivybridge
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, dpdk-kernel-modules (=${source:Version}), libpcap-dev
+Provides: dpdk
 Description: DPDK - Ivy Bridge
  DPDK is a set of libraries and drivers for fast packet processing. It was
  designed to run on any processors knowing Intel x86 has been the first CPU
