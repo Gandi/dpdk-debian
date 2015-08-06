@@ -1,3 +1,9 @@
+dpdk (2.0.0-2) unstable; urgency=low
+
+  * add dpdk_nic_bind in /usr/bin .
+
+ -- Nikita Kozlov <nikita@gandi.net>  Thu, 06 Aug 2015 15:18:16 +0200
+
 dpdk (2.0.0-1) unstable; urgency=low
 
   * Initial release
