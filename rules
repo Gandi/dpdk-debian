@@ -83,6 +83,7 @@ dh_auto_install/westmere:
 	mkdir -p $(CURDIR)/debian/dpdk-westmere/usr/share/dpdk-westmere
 	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib/* $(CURDIR)/debian/dpdk-westmere/usr/lib/dpdk-westmere/
 	mv $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include/* $(CURDIR)/debian/dpdk-westmere/usr/include/dpdk-westmere/
+	cp $(CURDIR)/tools/dpdk_nic_bind.py $(CURDIR)/debian/dpdk-westmere/usr/bin/dpdk_nic_bind
 	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/app
 	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/include
 	rm -rf $(CURDIR)/debian/build/dpdk-westmere/$(DPDK_TARGET)-westmere/lib
@@ -102,6 +103,7 @@ dh_auto_install/sandybridge:
 	mkdir -p $(CURDIR)/debian/dpdk-sandybridge/usr/share/dpdk-sandybridge
 	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib/* $(CURDIR)/debian/dpdk-sandybridge/usr/lib/dpdk-sandybridge
 	mv $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include/* $(CURDIR)/debian/dpdk-sandybridge/usr/include/dpdk-sandybridge
+	cp $(CURDIR)/tools/dpdk_nic_bind.py $(CURDIR)/debian/dpdk-sandybridge/usr/bin/dpdk_nic_bind
 	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/app
 	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/include
 	rm -rf $(CURDIR)/debian/build/dpdk-sandybridge/$(DPDK_TARGET)-sandybridge/lib
@@ -121,6 +123,7 @@ dh_auto_install/ivybridge:
 	mkdir -p $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge
 	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib/* $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge/
 	mv $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include/* $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk-ivybridge/
+	cp $(CURDIR)/tools/dpdk_nic_bind.py $(CURDIR)/debian/dpdk-ivybridge/usr/bin/dpdk_nic_bind
 	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/app
 	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include
 	rm -rf $(CURDIR)/debian/build/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib
