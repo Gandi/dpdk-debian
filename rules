@@ -27,6 +27,7 @@ dh_auto_configure/westmere:
 	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-westmere/.config
 	sed -ri 's,(RTE_PCI_CONFIG=).*,\1y,'       $(CURDIR)/$(DPDK_TARGET)-westmere/.config
 	sed -ri 's,(RTE_PCI_EXTENDED_TAG=).*,\1"on",'       $(CURDIR)/$(DPDK_TARGET)-westmere/.config
+	sed -ri 's,(RTE_FORCE_INTRINSICS=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-westmere/.config
 
 .PHONY: dh_auto_configure/sandybridge
 dh_auto_configure/sandybridge:
@@ -39,6 +40,7 @@ dh_auto_configure/sandybridge:
 	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
 	sed -ri 's,(RTE_PCI_CONFIG=).*,\1y,'       $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
 	sed -ri 's,(RTE_PCI_EXTENDED_TAG=).*,\1"on",'       $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
+	sed -ri 's,(RTE_FORCE_INTRINSICS=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-sandybridge/.config
 
 .PHONY: dh_auto_configure/ivybridge
 dh_auto_configure/ivybridge:
@@ -51,6 +53,7 @@ dh_auto_configure/ivybridge:
 	sed -ri 's,(RTE_KNI_KMOD=).*,\1n,'         $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
 	sed -ri 's,(RTE_PCI_CONFIG=).*,\1y,'       $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
 	sed -ri 's,(RTE_PCI_EXTENDED_TAG=).*,\1"on",'       $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
+	sed -ri 's,(RTE_FORCE_INTRINSICS=).*,\1y,' $(CURDIR)/$(DPDK_TARGET)-ivybridge/.config
 
 override_dh_auto_build: dh_auto_build/westmere dh_auto_build/sandybridge dh_auto_build/ivybridge
 
@@ -72,7 +75,6 @@ dh_auto_install/kernel-modules:
 
 override_dh_dkms:
 	dh_dkms -V $(DEB_VERSION_UPSTREAM)
-
 
 override_dh_auto_test:
 override_dh_auto_clean:
