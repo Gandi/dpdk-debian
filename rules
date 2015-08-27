@@ -59,19 +59,19 @@ override_dh_auto_build: dh_auto_build/westmere dh_auto_build/sandybridge dh_auto
 
 .PHONY: dh_auto_build/westmere
 dh_auto_build/westmere:
-	make -j5 O=$(DPDK_TARGET)-westmere DESTDIR=$(CURDIR)/debian/build/dpdk-westmere/
+	make -j5 O=$(DPDK_TARGET)-westmere DESTDIR=$(CURDIR)/debian/build/dpdk-westmere/ EXTRA_CFLAGS="-g3 -gdwarf-2"
 
 .PHONY: dh_auto_build/sandybridge
 dh_auto_build/sandybridge:
-	make -j5 O=$(DPDK_TARGET)-sandybridge DESTDIR=$(CURDIR)/debian/build/dpdk-sandybridge/
+	make -j5 O=$(DPDK_TARGET)-sandybridge DESTDIR=$(CURDIR)/debian/build/dpdk-sandybridge/ EXTRA_CFLAGS="-g3 -gdwarf-2"
 
 .PHONY: dh_auto_build/ivybridge
 dh_auto_build/ivybridge:
-	make -j5 O=$(DPDK_TARGET)-ivybridge DESTDIR=$(CURDIR)/debian/build/dpdk-ivybridge/
+	make -j5 O=$(DPDK_TARGET)-ivybridge DESTDIR=$(CURDIR)/debian/build/dpdk-ivybridge/ EXTRA_CFLAGS="-g3 -gdwarf-2"
 
 .PHONY: dh_auto_install/kernel-modules
 dh_auto_install/kernel-modules:
-	dh_install GNUmakefile LICENSE.GPL LICENSE.LGPL MAINTAINERS Makefile app config doc examples lib mk pkg scripts tools usr/src/dpdk-kernel-modules-2.0.0/
+	dh_install app config drivers examples GNUmakefile lib LICENSE.GPL LICENSE.LGPL MAINTAINERS Makefile mk scripts tools usr/src/dpdk-kernel-modules-2.1.0/
 
 override_dh_dkms:
 	dh_dkms -V $(DEB_VERSION_UPSTREAM)
@@ -142,3 +142,9 @@ dh_auto_install/ivybridge:
 	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/include/dpdk-ivybridge $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/include
 	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/lib/dpdk-ivybridge $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/lib
 	ln -rsT $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/config $(CURDIR)/debian/dpdk-ivybridge/usr/share/dpdk-ivybridge/$(DPDK_TARGET)-ivybridge/.config
+
+.PHONY: override_dh_strip
+override_dh_strip:
+	dh_strip -p "dpdk-westmere" --dbg-package=dpdk-westmere-dbg
+	dh_strip -p "dpdk-sandybridge" --dbg-package=dpdk-sandybridge-dbg
+	dh_strip -p "dpdk-ivybridge" --dbg-package=dpdk-ivybridge-dbg

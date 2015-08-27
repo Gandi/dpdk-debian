@@ -1,5 +1,5 @@
 PACKAGE_NAME="dpdk-kernel-modules"
-PACKAGE_VERSION="2.0.0"
+PACKAGE_VERSION="2.1.0"
 MAKE[0]=" make config RTE_KERNELDIR=${kernel_source_dir} T=x86_64-native-linuxapp-gcc O=${dkms_tree}/${PACKAGE_NAME}/${PACKAGE_VERSION}/build/build lib/librte_eal/common_sub lib/librte_eal/linuxapp_sub"
 CLEAN="rm -rf {dkms_tree}/${PACKAGE_NAME}/${PACKAGE_VERSION}/build/build"
 BUILT_MODULE_NAME[0]="igb_uio"

@@ -45,3 +45,35 @@ Description: DPDK - Ivy Bridge
  DPDK is a set of libraries and drivers for fast packet processing. It was
  designed to run on any processors knowing Intel x86 has been the first CPU
  to be supported. Ports for other CPUs like IBM Power 8 are under progress. 
+
+Package: dpdk-westmere-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends:
+    dpdk-westmere (= ${binary:Version}),
+    ${misc:Depends}
+Description: debugging symbols for dpdk-westmere
+ This package contains the debugging symbols for dpdk-westmere.
+
+Package: dpdk-sandybridge-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends:
+    dpdk-sandybridge (= ${binary:Version}),
+    ${misc:Depends}
+Description: debugging symbols for dpdk-sandybridge
+ This package contains the debugging symbols for dpdk-sandybridge.
+
+Package: dpdk-ivybridge-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends:
+    dpdk-ivybridge (= ${binary:Version}),
+    ${misc:Depends}
+Description: debugging symbols for dpdk-ivybridge
+ This package contains the debugging symbols for dpdk-ivybridge.
+
+

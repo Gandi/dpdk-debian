@@ -1,3 +1,21 @@
+dpdk (2.1.0-3) unstable; urgency=low
+
+  * add debug packages.
+
+ -- Nikita Kozlov <nikita@gandi.net>  Thu, 27 Aug 2015 04:12:16 +0200
+
+dpdk (2.1.0-2) unstable; urgency=low
+
+  * fix dkms install path.
+
+ -- Nikita Kozlov <nikita@gandi.net>  wed, 26 Aug 2015 02:18:16 +0200
+
+dpdk (2.1.0-1) unstable; urgency=low
+
+  * bump version 2.1.0.
+
+ -- Nikita Kozlov <nikita@gandi.net>  Wed, 26 Aug 2015 00:23:16 +0200
+
 dpdk (2.0.0-5) unstable; urgency=low
 
   * rename script for removing collisions.

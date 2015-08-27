@@ -1,3 +1,0 @@
-d5368d3c-kni-fix-build-with-kernel-4.0.patch
-45e63ba8-kni-fix-vhost-build-with-kernels-3.19-and-4.0.patch
-permit_librte_kni_build_without_kmod.patch
