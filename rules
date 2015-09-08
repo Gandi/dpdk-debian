@@ -3,6 +3,7 @@
 # output every command that modifies files on the build system.
 # DH_VERBOSE=1
 QUILT_REFRESH_ARGS=-p ab --no-timestamps --no-index
+export QUILT_SERIES=series-2.1.0
 
 # see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
 DPKG_EXPORT_BUILDFLAGS = 1
