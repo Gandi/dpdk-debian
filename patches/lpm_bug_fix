@@ -1,0 +1,30 @@
+Index: dpdk-2.1.0/lib/librte_lpm/rte_lpm.c
+===================================================================
+--- dpdk-2.1.0.orig/lib/librte_lpm/rte_lpm.c	2015-10-23 12:30:47.000000000 +0000
++++ dpdk-2.1.0/lib/librte_lpm/rte_lpm.c	2015-10-23 12:33:04.950183182 +0000
+@@ -735,7 +735,7 @@
+ 					lpm->tbl24[i].depth <= depth ) {
+ 				lpm->tbl24[i].valid = INVALID;
+ 			}
+-			else {
++			else if (lpm->tbl24[i].ext_entry == 1) {
+ 				/*
+ 				 * If TBL24 entry is extended, then there has
+ 				 * to be a rule with depth >= 25 in the
+@@ -770,6 +770,7 @@
+ 
+ 		struct rte_lpm_tbl8_entry new_tbl8_entry = {
+ 			.valid = VALID,
++			.valid_group = VALID,
+ 			.depth = sub_rule_depth,
+ 			.next_hop = lpm->rules_tbl
+ 			[sub_rule_index].next_hop,
+@@ -781,7 +782,7 @@
+ 					lpm->tbl24[i].depth <= depth ) {
+ 				lpm->tbl24[i] = new_tbl24_entry;
+ 			}
+-			else {
++			else if (lpm->tbl24[i].ext_entry == 1) {
+ 				/*
+ 				 * If TBL24 entry is extended, then there has
+ 				 * to be a rule with depth >= 25 in the
